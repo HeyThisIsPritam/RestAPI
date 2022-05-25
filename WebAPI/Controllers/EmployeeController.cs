@@ -10,6 +10,7 @@ namespace WebAPI.Controllers
 {
     public class EmployeeController : ApiController
     {
+        
         EmployeeDBEntities entities = new EmployeeDBEntities();
 
         [HttpGet]
@@ -27,7 +28,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        public HttpResponseMessage Employee(int id)
+        public HttpResponseMessage EmployeeById(int id)
         {
             var entity = entities.Employees.FirstOrDefault(e => e.empId == id);
             if(entity != null)
