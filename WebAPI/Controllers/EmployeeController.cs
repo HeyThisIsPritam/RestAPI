@@ -12,11 +12,22 @@ namespace WebAPI.Controllers
     {
         EmployeeDBEntities entities = new EmployeeDBEntities();
 
-        public IEnumerable<Employee> Get()
+        [HttpGet]
+        public HttpResponseMessage EmployeeByDesignation(string designation)
         {
-            return entities.Employees.ToList();
+            var entity = entities.Employees.Where(e => e.designation.ToLower().Equals(designation)).ToList();
+            if (entity != null)
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, entity);
+            }
+            else
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound, "Employee Id  : " + designation + " not found.");
+            }
         }
-        public HttpResponseMessage Get(int id)
+
+        [HttpGet]
+        public HttpResponseMessage Employee(int id)
         {
             var entity = entities.Employees.FirstOrDefault(e => e.empId == id);
             if(entity != null)
@@ -29,7 +40,8 @@ namespace WebAPI.Controllers
             }
         }
 
-        public HttpResponseMessage Post([FromBody] Employee employee)
+        [HttpPost]
+        public HttpResponseMessage AddEmployee([FromBody] Employee employee)
         {
             try
             {
@@ -45,7 +57,9 @@ namespace WebAPI.Controllers
             }
             
         }
-        public HttpResponseMessage Put(int id,[FromBody] Employee employee)
+
+        [HttpPut]
+        public HttpResponseMessage UpdateEmployee(int id,[FromBody] Employee employee)
         {
             var entity = entities.Employees.FirstOrDefault(e => e.empId == id);
             try
@@ -68,7 +82,9 @@ namespace WebAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, e);
             }
         }
-        public HttpResponseMessage Delete(int id)
+
+        [HttpDelete]
+        public HttpResponseMessage RemoveEmployee(int id)
         {
             var entity = entities.Employees.FirstOrDefault(e => e.empId == id);
             try
